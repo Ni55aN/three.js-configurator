@@ -40,7 +40,7 @@ var car = {
         update() {
             var self = this;
 
-            this.front.forEach(w => w.rotation.y = car.steer);
+            this.front.forEach(w => w.rotation.y = -car.steer);
             [...this.front, ...this.rear].forEach(w => w.rotation.x = self.rotation-=car.speed);
         }
     },
