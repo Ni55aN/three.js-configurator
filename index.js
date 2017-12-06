@@ -9,6 +9,8 @@ var clock = new THREE.Clock();
 var car = {
     speed: 0.2,
     steer: 0,
+    mainMaterial: null,
+    wheelMaterial: null,
     doors: {
         openSpeed: 0.02,
         state: 0,
@@ -122,7 +124,10 @@ function loadGLTF() {
 
                 node.material.envMap = envMap;
                 node.material.needsUpdate = true;
-                castShadow = true;
+                if (node.material.name == 'main_material')
+                    car.mainMaterial = node.material;
+                else if (node.material.name == 'wheel_material')
+                    car.wheelMaterial = node.material;
       
             }
       
@@ -175,6 +180,8 @@ function init() {
 function initGUI() {
     var lightToggler = document.querySelector('.controls .light');
     var doorsToggler = document.querySelector('.controls .doors');
+    var mainColorPicker = document.querySelector('.controls .mainColor');
+    var wheelColorPicker = document.querySelector('.controls .wheelColor');
     var speedControl = document.querySelector('.controls .speed');
     var steerControl = document.querySelector('.controls .steer');
 
@@ -189,6 +196,12 @@ function initGUI() {
             car.doors.open();
     }
 
+    mainColorPicker.oninput = () => {
+        car.mainMaterial.color.setStyle(mainColorPicker.value);
+    }
+    wheelColorPicker.oninput = () => {
+        car.wheelMaterial.color.setStyle(wheelColorPicker.value);
+    }
     speedControl.oninput = () => {
         car.speed = Math.pow(speedControl.value, 1/4)/100;
     }
