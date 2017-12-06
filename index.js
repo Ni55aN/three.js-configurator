@@ -1,12 +1,38 @@
 
 var VIEW_ANGLE = 45;
-var camera, scene, renderer;
+var camera, scene, renderer, mixer;
 var environmentMap;
 var orbitControls, loader;
+
+var clock = new THREE.Clock();
 
 var car = {
     speed: 0.2,
     steer: 0,
+    doors: {
+        openSpeed: 0.02,
+        state: 0,
+        action: null,
+        needOpen: false,
+        open() {
+            this.action.play();
+            this.action.timeScale = 0;
+            this.needOpen = true;
+        },
+        close() {
+            this.needOpen = false;
+        },
+        update() {
+            if (this.needOpen)
+                this.state += this.openSpeed;
+            else
+                this.state -= this.openSpeed;
+            this.state = Math.max(0, Math.min(1, this.state)); 
+            
+            if (this.action)
+                this.action.time = this.state;
+        }
+    },
     wheels: {
         front: [],
         rear: [],
@@ -43,7 +69,7 @@ var car = {
 };
 
 init();
-animation();
+animate();
 
 function getEnvMap() {
 
@@ -73,7 +99,8 @@ function loadGLTF() {
     loader.load(window.assetsPath+'model.gltf', function (data) {
 
         let envMap = getEnvMap();
-      
+
+        console.log(data)
         data.scene.traverse(function (node) {
       
             node.receiveShadow = true;
@@ -100,6 +127,15 @@ function loadGLTF() {
             }
       
         });
+
+        var animations = data.animations;
+   
+        if (animations && animations.length) {
+        
+            mixer = new THREE.AnimationMixer(data.scene);
+            car.doors.action = mixer.clipAction(animations[0]);
+        
+        }
       
         //  scene.background = envMap;
       
@@ -138,11 +174,19 @@ function init() {
 
 function initGUI() {
     var lightToggler = document.querySelector('.controls .light');
+    var doorsToggler = document.querySelector('.controls .doors');
     var speedControl = document.querySelector('.controls .speed');
     var steerControl = document.querySelector('.controls .steer');
 
     lightToggler.onclick = () => {
         car.lights.turn(!car.lights.turnedOn);
+    }
+
+    doorsToggler.onclick = () => {
+        if (car.doors.needOpen)
+            car.doors.close();
+        else
+            car.doors.open();
     }
 
     speedControl.oninput = () => {
@@ -184,13 +228,15 @@ function initLights() {
     scene.add(light2);
 }
 
-function animation() {
-    requestAnimationFrame(animation);
+function animate() {
+    requestAnimationFrame(animate);
   
+    if (mixer) mixer.update(clock.getDelta());
     orbitControls.update();
 
     car.wheels.update();
     car.lights.update();
+    car.doors.update();
 
     renderer.render(scene, camera);
   
