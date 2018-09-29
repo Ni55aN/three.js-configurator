@@ -2,12 +2,15 @@ var path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 
 var config = {
-  entry: __dirname + '/src/index.js',
+  entry: {
+    THREEConfigurator: __dirname + '/src/index.js', 
+    init: __dirname + '/src/init.js'
+  },
   output: {
     path: __dirname + '/dist',
-    filename: '[name].bundle.js',
-    chunkFilename: '[name].bundle.js',
-    library: 'THREEConfigurator',
+    filename: '[name].js',
+    // chunkFilename: '[name].bundle.js',
+    library: '[name]',
     libraryTarget: 'umd',
     umdNamedDefine: true
   },

@@ -3,6 +3,8 @@ import GLTFLoader from 'three-gltf-loader';
 import './assets/styles/style.css';
 import 'normalize.css';
 
+import { getEnvMap } from './envmap';
+
 const OrbitControls = require('three-orbit-controls')(THREE)
 
 var VIEW_ANGLE = 45;
@@ -76,36 +78,12 @@ var car = {
     }
 };
 
-init();
-animate();
-
-async function getEnvMap() {
-
-    if (environmentMap) {
-
-        return environmentMap;
-
-    }
-    var posx = (await import('./assets/images/env/1/posx.jpg')).default;
-    var negx = (await import('./assets/images/env/1/negx.jpg')).default;
-    var posy = (await import('./assets/images/env/1/posy.jpg')).default;
-    var negy = (await import('./assets/images/env/1/negy.jpg')).default;
-    var posz = (await import('./assets/images/env/1/posz.jpg')).default;
-    var negz = (await import('./assets/images/env/1/negz.jpg')).default;
-    var urls = [posx, negx, posy, negy, posz, negz];
-
-    environmentMap = new THREE.CubeTextureLoader().load(urls);
-    environmentMap.format = THREE.RGBFormat;
-    return environmentMap;
-
-}
-
 async function loadGLTF() {
     loader = new GLTFLoader();
     await import('./assets/models/model.bin');
     loader.load((await import('./assets/models/model.gltf')).default, async function (data) {
 
-        let envMap = await getEnvMap();
+        let envMap = environmentMap = environmentMap || getEnvMap();
 
         console.log(data)
         data.scene.traverse(function (node) {
@@ -158,7 +136,7 @@ async function loadGLTF() {
     });
 }
 
-function init() {
+async function init() {
     camera = new THREE.PerspectiveCamera(VIEW_ANGLE, window.innerWidth / window.innerHeight, 0.01, 100);
     camera.position.z = -9;
     camera.position.x = 8;
@@ -177,7 +155,7 @@ function init() {
   
     scene = new THREE.Scene();
     
-    loadGLTF();
+    await loadGLTF();
     initLights();
     initGUI();
 }  
@@ -258,4 +236,9 @@ function animate() {
 
     renderer.render(scene, camera);
   
+}
+
+export {
+    init,
+    animate
 }
