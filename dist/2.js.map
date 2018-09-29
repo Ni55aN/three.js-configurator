@@ -1,0 +1,1 @@
+{"version":3,"sources":["webpack://[name]/./src/assets/models/model.bin"],"names":["module","exports","__webpack_require__","p"],"mappings":"wFAAAA,EAAAC,QAAiBC,EAAAC,EAAuB","file":"2.js","sourcesContent":["module.exports = __webpack_public_path__ + \"987735bd0cc9be75c9a7d665795f9842.bin\";"],"sourceRoot":""}
