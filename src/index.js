@@ -1,3 +1,9 @@
+import * as THREE from 'three';
+import GLTFLoader from 'three-gltf-loader';
+import './assets/styles/style.css';
+import 'normalize.css';
+
+const OrbitControls = require('three-orbit-controls')(THREE)
 
 var VIEW_ANGLE = 45;
 var camera, scene, renderer, mixer;
@@ -73,21 +79,20 @@ var car = {
 init();
 animate();
 
-function getEnvMap() {
+async function getEnvMap() {
 
     if (environmentMap) {
 
         return environmentMap;
 
     }
-
-    var path = window.assetsPath+'env/1/';
-    var format = '.jpg';
-    var urls = [
-        path + 'posx' + format, path + 'negx' + format,
-        path + 'posy' + format, path + 'negy' + format,
-        path + 'posz' + format, path + 'negz' + format
-    ];
+    var posx = (await import('./assets/images/env/1/posx.jpg')).default;
+    var negx = (await import('./assets/images/env/1/negx.jpg')).default;
+    var posy = (await import('./assets/images/env/1/posy.jpg')).default;
+    var negy = (await import('./assets/images/env/1/negy.jpg')).default;
+    var posz = (await import('./assets/images/env/1/posz.jpg')).default;
+    var negz = (await import('./assets/images/env/1/negz.jpg')).default;
+    var urls = [posx, negx, posy, negy, posz, negz];
 
     environmentMap = new THREE.CubeTextureLoader().load(urls);
     environmentMap.format = THREE.RGBFormat;
@@ -95,12 +100,12 @@ function getEnvMap() {
 
 }
 
-function loadGLTF() {
-    loader = new THREE.GLTFLoader();
-  
-    loader.load(window.assetsPath+'model.gltf', function (data) {
+async function loadGLTF() {
+    loader = new GLTFLoader();
+    await import('./assets/models/model.bin');
+    loader.load((await import('./assets/models/model.gltf')).default, async function (data) {
 
-        let envMap = getEnvMap();
+        let envMap = await getEnvMap();
 
         console.log(data)
         data.scene.traverse(function (node) {
@@ -168,7 +173,7 @@ function init() {
   
     document.body.appendChild(renderer.domElement);
   
-    orbitControls = new THREE.OrbitControls(camera, renderer.domElement);
+    orbitControls = new OrbitControls(camera, renderer.domElement);
   
     scene = new THREE.Scene();
     
@@ -219,7 +224,7 @@ function createStopLight(intens, dist) {
     l.shadow.camera.far = 100;   
     l.shadow.bias = -0.0001;
     l.shadow.mapSize.width = 2048;
-    l.shadow.mapSize.width.height = 2048;
+    l.shadow.mapSize.height = 2048;
     return l;
 }
 

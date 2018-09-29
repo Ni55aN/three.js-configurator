@@ -1,0 +1,47 @@
+{
+  "name": "three-configurator",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "cross-env NODE_ENV=development webpack-dev-server --mode development",
+    "build": "cross-env NODE_ENV=production webpack --mode production"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Ni55aN/three.js-configurator.git"
+  },
+  "author": "Ni55aN",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Ni55aN/three.js-configurator/issues"
+  },
+  "homepage": "https://github.com/Ni55aN/three.js-configurator#readme",
+  "devDependencies": {
+    "@babel/core": "^7.1.2",
+    "@babel/plugin-syntax-dynamic-import": "^7.0.0",
+    "@babel/plugin-transform-regenerator": "^7.0.0",
+    "@babel/plugin-transform-runtime": "^7.1.0",
+    "@babel/preset-env": "^7.1.0",
+    "babel-eslint": "^10.0.1",
+    "babel-loader": "^8.0.4",
+    "cross-env": "^5.2.0",
+    "css-loader": "^1.0.0",
+    "eslint": "^5.6.1",
+    "eslint-loader": "^2.1.1",
+    "file-loader": "^2.0.0",
+    "html-webpack-plugin": "^3.2.0",
+    "style-loader": "^0.23.0",
+    "url-loader": "^1.1.1",
+    "webpack": "^4.20.2",
+    "webpack-cli": "^3.1.2",
+    "webpack-dev-server": "^3.1.9"
+  },
+  "dependencies": {
+    "@babel/runtime": "^7.1.2",
+    "normalize.css": "^8.0.0",
+    "three": "^0.97.0",
+    "three-gltf-loader": "^1.97.0",
+    "three-orbit-controls": "^82.1.0"
+  }
+}
