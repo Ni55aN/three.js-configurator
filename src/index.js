@@ -1,3 +1,4 @@
+import './public-path';
 import * as THREE from 'three';
 import GLTFLoader from 'three-gltf-loader';
 import './assets/styles/style.css';
@@ -6,6 +7,7 @@ import 'normalize.css';
 import bin from './assets/models/model.bin';
 import model from './assets/models/model.gltf';
 import { getEnvMap } from './envmap';
+
 
 const OrbitControls = require('three-orbit-controls')(THREE)
 

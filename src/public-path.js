@@ -1,0 +1,1 @@
+__webpack_public_path__ = window.webpackPublicPath || __webpack_public_path__;
