@@ -56,20 +56,7 @@ var config = {
     new HtmlWebpackPlugin({
       template: __dirname + '/public/index.html'
     })
-  ],
-  // optimization: {
-  //   splitChunks: {
-  //     cacheGroups: {
-  //       vendor: {
-  //         chunks: 'initial',
-  //         name: 'vendor',
-  //         test: 'vendor',
-  //         enforce: true
-  //       },
-  //     }
-  //   },
-  //   runtimeChunk: true
-  // }
+  ]
 };
 
 module.exports = config;

@@ -3,6 +3,8 @@ import GLTFLoader from 'three-gltf-loader';
 import './assets/styles/style.css';
 import 'normalize.css';
 
+import bin from './assets/models/model.bin';
+import model from './assets/models/model.gltf';
 import { getEnvMap } from './envmap';
 
 const OrbitControls = require('three-orbit-controls')(THREE)
@@ -80,8 +82,8 @@ var car = {
 
 async function loadGLTF() {
     loader = new GLTFLoader();
-    await import('./assets/models/model.bin');
-    loader.load((await import('./assets/models/model.gltf')).default, async function (data) {
+
+    loader.load(model, async function (data) {
 
         let envMap = environmentMap = environmentMap || getEnvMap();
 
