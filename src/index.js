@@ -16,9 +16,12 @@ const OrbitControls = require('three-orbit-controls')(THREE)
 
 class Configurator {
 
-    constructor() {
+    constructor(container, width, height) {
         this.clock = new THREE.Clock();
         this.car = new Car();
+        this.container = container;
+        this.width = width;
+        this.height = height;
     }
 
     async loadGLTF() {
@@ -72,7 +75,7 @@ class Configurator {
     }
 
     async init() {
-        this.camera = new THREE.PerspectiveCamera(VIEW_ANGLE, window.innerWidth / window.innerHeight, 0.01, 100);
+        this.camera = new THREE.PerspectiveCamera(VIEW_ANGLE, this.width() / this.height(), 0.01, 100);
         this.camera.position.z = -9;
         this.camera.position.x = 8;
         this.camera.position.y = 6;
@@ -82,14 +85,20 @@ class Configurator {
         this.renderer.physicallyBasedShading = true;
         this.renderer.shadowMap.enabled = true;
         this.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
-        this.renderer.setSize(window.innerWidth, window.innerHeight) ;
+        this.renderer.setSize(this.width(), this.height()) ;
     
-        document.body.appendChild(this.renderer.domElement);
+        this.container.appendChild(this.renderer.domElement);
     
         this.orbitControls = new OrbitControls(this.camera, this.renderer.domElement);
     
         this.scene = new THREE.Scene();
         this.environmentMap = getEnvMap();
+
+        window.addEventListener('resize', () => {
+            this.camera.aspect = this.width() / this.height();
+            this.camera.updateProjectionMatrix();
+            this.renderer.setSize(this.width(), this.height());
+        });
 
         await this.loadGLTF();
         initLights(this.scene);
