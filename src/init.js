@@ -1,6 +1,8 @@
-import { init, animate } from './index';
+import { Configurator } from './index';
 
 (async () => {
-    await init();
-    animate();
+    const configurator = new Configurator();
+
+    await configurator.init();
+    configurator.animate();
 })();
